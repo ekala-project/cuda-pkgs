@@ -3,11 +3,13 @@ buildRedist {
   redistName = "cuda";
   pname = "cuda_nvml_dev";
 
+  # Contains example Makefiles with /usr/ paths
+  allowFHSReferences = true;
+
   outputs = [
     "out"
     "dev"
     "include"
-    "lib"
     "stubs"
   ];
 

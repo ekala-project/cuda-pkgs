@@ -3,11 +3,11 @@ buildRedist {
   redistName = "cuda";
   pname = "cuda_sanitizer_api";
 
+  # Contains docs with /usr/local/cuda references
+  allowFHSReferences = true;
+
   outputs = [
     "out"
-    "bin"
-    "include"
-    "lib"
   ];
 
   meta = {
