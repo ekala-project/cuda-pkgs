@@ -8,7 +8,6 @@ buildRedist {
     "dev"
     "bin"
     "include"
-    "lib"
   ];
 
   meta = {
