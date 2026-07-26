@@ -3,6 +3,9 @@ buildRedist {
   redistName = "cuda";
   pname = "cuda_cupti";
 
+  # Doc output contains HTML with /usr/ references in search index
+  allowFHSReferences = true;
+
   outputs = [
     "out"
     "dev"
