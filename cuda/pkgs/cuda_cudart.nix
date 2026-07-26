@@ -2,6 +2,7 @@
   addDriverRunpath,
   buildRedist,
   cccl,
+  cuda_crt,
   cudaAtLeast,
   lib,
 }:
@@ -15,6 +16,10 @@ buildRedist {
 
   propagatedBuildInputs = [
     (lib.getOutput "include" cccl)
+  ]
+  # crt/host_config.h moved to cuda_crt in CUDA 13.0
+  ++ lib.optionals (cudaAtLeast "13.0") [
+    (lib.getOutput "include" cuda_crt)
   ];
 
   allowFHSReferences = false;

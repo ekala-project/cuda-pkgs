@@ -1,5 +1,9 @@
+# TODO: nccl requires a combined CUDA toolkit layout where nvcc can find cicc
+# (nvvm/bin/cicc) relative to its own bin directory. This needs a cudatoolkit
+# wrapper or symlink forest to work properly.
 {
   backendStdenv,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cudaAtLeast,
@@ -59,10 +63,9 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     (getInclude cuda_nvcc)
+    cccl
     cuda_cudart
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
   postPatch = ''
     patchShebangs ./src/device/generate.py
@@ -86,6 +89,12 @@ backendStdenv.mkDerivation (finalAttrs: {
     "CUDA_LIB=${getLib cuda_cudart}/lib"
     "NVCC_GENCODE=${flags.gencodeString}"
     "PREFIX=$(out)"
+  ];
+
+  # CCCL headers are under include/cccl/ but consumers expect cuda/atomic etc.
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-unused-function"
+    "-isystem" "${lib.getOutput "include" cccl}/include/cccl"
   ];
 
   enableParallelBuilding = true;
