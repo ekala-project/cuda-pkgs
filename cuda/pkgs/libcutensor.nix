@@ -1,4 +1,8 @@
-{ buildRedist }:
+{
+  buildRedist,
+  lib,
+  libcublas,
+}:
 buildRedist {
   redistName = "cutensor";
   pname = "libcutensor";
@@ -9,6 +13,10 @@ buildRedist {
     "include"
     "lib"
     "static"
+  ];
+
+  buildInputs = [
+    (lib.getLib libcublas)
   ];
 
   meta = {

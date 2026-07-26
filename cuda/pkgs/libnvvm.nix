@@ -3,11 +3,9 @@ buildRedist {
   redistName = "cuda";
   pname = "libnvvm";
 
+  # Non-standard layout: files under nvvm/{lib64,include,bin}/
   outputs = [
     "out"
-    "dev"
-    "include"
-    "lib"
   ];
 
   meta = {

@@ -7,7 +7,6 @@ buildRedist {
     "out"
     "dev"
     "include"
-    "lib"
     "static"
   ];
 
