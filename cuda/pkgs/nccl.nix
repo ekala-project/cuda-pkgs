@@ -104,8 +104,8 @@ backendStdenv.mkDerivation (finalAttrs: {
   ''
   + ''
     remove-references-to -t "${getBin cuda_nvcc}" \
-      ''${!outputLib}/lib/libnccl.so.* \
-      ''${!outputStatic}/lib/*.a
+      "$out"/lib/libnccl.so.* \
+      "$static"/lib/*.a
   '';
 
   disallowedRequisites = [ (getBin cuda_nvcc) ];
