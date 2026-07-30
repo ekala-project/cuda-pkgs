@@ -21,9 +21,10 @@ buildRedist {
     ncurses
   ];
 
-  # cuda-gdb bundles a python3.8 that we can't satisfy
+  # cuda-gdb bundles python3.8 and may link libcrypt from older glibc
   autoPatchelfIgnoreMissingDeps = [
     "libpython*"
+    "libcrypt*"
   ];
 
   meta = {

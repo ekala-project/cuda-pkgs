@@ -1,4 +1,8 @@
-{ buildRedist }:
+{
+  buildRedist,
+  lib,
+  libnvjitlink,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "libcusparse";
@@ -10,6 +14,10 @@ buildRedist {
     "lib"
     "static"
     "stubs"
+  ];
+
+  buildInputs = [
+    (lib.getLib libnvjitlink)
   ];
 
   meta = {

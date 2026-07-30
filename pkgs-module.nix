@@ -20,6 +20,7 @@ let
         cuda = "12.8.1";
         cudnn = "8.9.7";
         cutensor = "2.3.1";
+        tensorrt = "10.16.1";
       } "12.8.1";
 
       cudaPackages_13_3 = mkCudaPackages {
