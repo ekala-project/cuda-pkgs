@@ -1,0 +1,4 @@
+result*
+/patches
+__pycache__/
+.pytest_cache/
