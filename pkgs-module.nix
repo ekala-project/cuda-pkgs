@@ -3,6 +3,40 @@
 let
   pkgsOverlay = import ./top-level.nix;
 
+  # Overlay that adds jetpack scopes, analogous to cudaScopeOverlay.
+  # Produces jetpack.v5, jetpack.v6, jetpack.v7 and convenience aliases.
+  jetpackScopeOverlay = final: prev:
+    let
+      versions = import ./jetpack/db/versions.nix;
+
+      mkJetpack =
+        versionInfo:
+        import ./jetpack/scope {
+          inherit (versionInfo)
+            jetpackVersion
+            l4tVersion
+            cudaVersion
+            cudaDriverVersion
+            bspHash
+            ;
+          inherit (final) lib;
+          pkgs = final;
+        };
+    in
+    {
+      jetpack = {
+        v5 = mkJetpack versions.v5;
+        v6 = mkJetpack versions.v6;
+        v7 = mkJetpack versions.v7;
+      };
+
+      # Convenience aliases
+      jetpackPackages_5 = final.jetpack.v5;
+      jetpackPackages_6 = final.jetpack.v6;
+      jetpackPackages_7 = final.jetpack.v7;
+      jetpackPackages = final.jetpack.v7;
+    };
+
   # Overlay that adds cudaPackages scope to the top-level package set.
   # Each cudaPackages_X_Y is a full scope of CUDA packages for that toolkit version.
   cudaScopeOverlay = final: prev:
@@ -16,6 +50,12 @@ let
         };
     in
     {
+      cudaPackages_11_4 = mkCudaPackages {
+        cuda = "11.4.4";
+        cudnn = "8.6.0";
+        cutensor = "1.6.2";
+      } "11.4.4";
+
       cudaPackages_12_8 = mkCudaPackages {
         cuda = "12.8.1";
         cudnn = "8.9.7";
@@ -38,6 +78,7 @@ in
   overlays = {
     pkgs = [
       cudaScopeOverlay
+      jetpackScopeOverlay
       pkgsOverlay
     ];
   };
