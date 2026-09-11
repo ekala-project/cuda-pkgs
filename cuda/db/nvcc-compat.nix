@@ -1,5 +1,9 @@
 {
   nvccCompatibilities = {
+    "11.4" = {
+      clang = { maxMajorVersion = "12"; minMajorVersion = "7"; };
+      gcc = { maxMajorVersion = "11"; minMajorVersion = "6"; };
+    };
     "12.0" = {
       clang = { maxMajorVersion = "14"; minMajorVersion = "7"; };
       gcc = { maxMajorVersion = "12"; minMajorVersion = "6"; };
