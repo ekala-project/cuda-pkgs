@@ -20,8 +20,6 @@ This repository is the CUDA vertical slice for the ekapkgs poly-repo Nixpkgs for
 | [`cuda/backend-stdenv/`](cuda/backend-stdenv/) | CUDA-aware stdenv with compatible GCC version |
 | [`cuda/scope/`](cuda/scope/) | Scope constructor that builds a complete cudaPackages set |
 | [`cuda/pkgs/`](cuda/pkgs/) | Auto-discovered CUDA package expressions |
-| [`pkgs-many/cuda-packages/`](pkgs-many/cuda-packages/) | mkManyVariants for versioned cudaPackages (12.8, 13.3) |
-| [`pkgs/`](pkgs/) | Native (non-CUDA) package expressions |
 
 ## How Packages Are Discovered
 
