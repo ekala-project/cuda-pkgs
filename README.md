@@ -11,7 +11,7 @@ Two CUDA toolkit versions are supported: **12.8** and **13.3**.
 ```
 default.nix            # Entry point, returns pkgs + our changes in this repo
 pkgs-module.nix        # Module that adds cudaPackages scopes via overlays.pkgs
-cuda-packages.nix      # Post-processing overlay for aliases/overrides
+cuda-packages.nix      # cudaPackages overlay for aliases/overrides, applied via overlays.cuda
 top-level.nix          # Top-level overlay for promoting CUDA tools to pkgs scope
 
 cuda/
@@ -40,6 +40,31 @@ import core {
   modules = [ ./pkgs-module.nix ];
 }
 ```
+
+## Extending cudaPackages
+
+Every versioned scope (`cudaPackages_12_8`, `cudaPackages_13_3`, and therefore
+`cudaPackages`) is built with `lib.makeScope` and applies the overlays listed in
+`config.overlays.cuda`. The option is declared by corepkgs alongside
+`overlays.python`, `overlays.lua`, etc. To add or override packages in all CUDA
+versions at once:
+
+```nix
+import ./. {
+  modules = [
+    {
+      overlays.cuda = [
+        (final: prev: {
+          libcublas = prev.libcublas.overrideAttrs (old: { /* ... */ });
+        })
+      ];
+    }
+  ];
+}
+```
+
+A single scope can still be adjusted with
+`cudaPackages_12_8.overrideScope (final: prev: { ... })`.
 
 ## Packages
 

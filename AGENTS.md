@@ -9,7 +9,7 @@ This repository is the CUDA vertical slice for the ekapkgs poly-repo Nixpkgs for
 | [`default.nix`](default.nix) | Entry point; imports pins and applies `pkgs-module.nix` via the corepkgs module system |
 | [`pins.nix`](pins.nix) | Pinned Git dependencies (`corepkgs`, `nix-lib`) |
 | [`pkgs-module.nix`](pkgs-module.nix) | Module that wires up the cudaPackages scope via overlays |
-| [`cuda-packages.nix`](cuda-packages.nix) | Post-processing overlay for aliases and overrides applied after auto-called entries |
+| [`cuda-packages.nix`](cuda-packages.nix) | cudaPackages overlay for aliases and overrides, registered in `config.overlays.cuda` and applied after auto-called entries |
 | [`top-level.nix`](top-level.nix) | Promotes select CUDA packages to top-level CLI applications |
 | [`repos-packages.nix`](repos-packages.nix) | Standalone helper for validation/testing |
 | [`cuda/lib/`](cuda/lib/) | CUDA utility functions (gencode flags, capability formatting, redist URLs) |
