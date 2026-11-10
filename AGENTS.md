@@ -90,15 +90,17 @@ For updates: `cudaPackages.<pname>: <version_old> -> <version_new>`
 
 ## Validation
 
+Most CUDA packages are unfree, so pass `config` through `default.nix`:
+
 ```bash
 # Evaluate (catches syntax/dependency errors)
-nix-instantiate -A cudaPackages.<pname>
+nix-instantiate --arg config '{ allowUnfree = true; }' -A cudaPackages.<pname>
 
 # Build
-nix-build -A cudaPackages.<pname>
+nix-build --arg config '{ allowUnfree = true; }' -A cudaPackages.<pname>
 
 # Specific CUDA version
-nix-instantiate -A cudaPackages.variants.v12_8.<pname>
+nix-instantiate --arg config '{ allowUnfree = true; }' -A cudaPackages_12_8.<pname>
 
 # Format
 nix fmt <path-to-file>
