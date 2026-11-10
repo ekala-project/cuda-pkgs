@@ -7,6 +7,7 @@ This repository is the CUDA vertical slice for the ekapkgs poly-repo Nixpkgs for
 | Path | Purpose |
 |------|---------|
 | [`default.nix`](default.nix) | Entry point; imports pins and applies `pkgs-module.nix` via the corepkgs module system |
+| [`flake.nix`](flake.nix) | Provides the `nix fmt` formatter (from corepkgs) and `legacyPackages` |
 | [`pins.nix`](pins.nix) | Pinned Git dependencies (`corepkgs`, `nix-lib`) |
 | [`pkgs-module.nix`](pkgs-module.nix) | Module that wires up the cudaPackages scope via overlays |
 | [`cuda-packages.nix`](cuda-packages.nix) | Post-processing overlay for aliases and overrides applied after auto-called entries |

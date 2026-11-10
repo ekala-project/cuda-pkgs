@@ -10,6 +10,7 @@ Two CUDA toolkit versions are supported: **12.8** and **13.3**.
 
 ```
 default.nix            # Entry point, returns pkgs + our changes in this repo
+flake.nix              # Formatter (`nix fmt`) and legacyPackages
 pkgs-module.nix        # Module that adds cudaPackages scopes via overlays.pkgs
 cuda-packages.nix      # Post-processing overlay for aliases/overrides
 top-level.nix          # Top-level overlay for promoting CUDA tools to pkgs scope
