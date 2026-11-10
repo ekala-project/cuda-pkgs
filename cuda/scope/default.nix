@@ -90,8 +90,10 @@ let
       directory = ../pkgs;
     };
 
-  cudaPackages = lib.makeScope pkgs.newScope (
-    extends (composeManyExtensions [ ]) cudaPackagesFixedPoint
-  );
+  # User and downstream extensions, declared by corepkgs as `config.overlays.cuda`.
+  # Applied to every versioned cudaPackages scope.
+  cudaPackagesExtensions = composeManyExtensions pkgs.config.overlays.cuda;
+
+  cudaPackages = lib.makeScope pkgs.newScope (extends cudaPackagesExtensions cudaPackagesFixedPoint);
 in
 cudaPackages

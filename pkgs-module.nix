@@ -2,12 +2,15 @@
 
 let
   pkgsOverlay = import ./top-level.nix;
+  cudaOverrides = import ./cuda-packages.nix;
 
   # Overlay that adds cudaPackages scope to the top-level package set.
   # Each cudaPackages_X_Y is a full scope of CUDA packages for that toolkit version.
-  cudaScopeOverlay = final: prev:
+  cudaScopeOverlay =
+    final: prev:
     let
-      mkCudaPackages = selectedManifests: cudaVersion:
+      mkCudaPackages =
+        selectedManifests: cudaVersion:
         import ./cuda/scope {
           cudaMajorMinorPatchVersion = cudaVersion;
           inherit (final) lib;
@@ -40,5 +43,6 @@ in
       cudaScopeOverlay
       pkgsOverlay
     ];
+    cuda = [ cudaOverrides ];
   };
 }
