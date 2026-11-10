@@ -43,6 +43,10 @@ in
       cudaScopeOverlay
       pkgsOverlay
     ];
-    cuda = [ cudaOverrides ];
+    # The module system orders list definitions by module position, so without
+    # mkBefore a module listed after this one would have its overlays.cuda
+    # entries applied before cuda-packages.nix, and lose to it. Pin
+    # cuda-packages.nix to the front so user overlays always see and override it.
+    cuda = lib.mkBefore [ cudaOverrides ];
   };
 }
