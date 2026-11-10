@@ -26,13 +26,16 @@ cuda/
 
 ## Usage
 
+Most CUDA packages are unfree, so pass `config.allowUnfree = true` (or
+`--arg config '{ allowUnfree = true; }'` on the command line).
+
 ```nix
 # As a standalone package set
-let pkgs = import ./. {};
+let pkgs = import ./. { config.allowUnfree = true; };
 in pkgs.cudaPackages.libcublas
 
 # Specific CUDA version
-let pkgs = import ./. {};
+let pkgs = import ./. { config.allowUnfree = true; };
 in pkgs.cudaPackages_12_8.cuda_cudart
 
 # As a module in another ekapkgs repo
