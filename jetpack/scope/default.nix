@@ -74,8 +74,7 @@ let
       # Reference the appropriate cudaPackages from pkgs for CUDA integration.
       cudaPackages = pkgs.cudaPackages or { };
 
-      markForCudatoolkitRootHook =
-        pkgs.cudaPackages.markForCudatoolkitRootHook or null;
+      markForCudatoolkitRootHook = pkgs.cudaPackages.markForCudatoolkitRootHook or null;
 
       # Flash tools
       flash-tools = finalJetpack.callPackage ../pkgs/flash-tools { };
@@ -88,6 +87,7 @@ let
 
       # EEPROM tool
       tegra-eeprom-tool = pkgs.callPackage ../pkgs/tegra-eeprom-tool { };
+      tegra-eeprom-tool-static = pkgs.pkgsStatic.callPackage ../pkgs/tegra-eeprom-tool { };
 
       # GPT and firmware patching
       patchgpt = finalJetpack.callPackage ../pkgs/patchgpt { };
@@ -113,6 +113,23 @@ let
 
       # Container support
       l4tCsv = finalJetpack.callPackage ../pkgs/containers/l4t-csv.nix { };
+      # File listing of every deb, used to generate the container l4t.json
+      unpackedDebsFilenames =
+        pkgs.runCommand "unpackedDebsFilenames-${l4tMajorMinorPatchVersion}"
+          { nativeBuildInputs = [ pkgs.buildPackages.dpkg ]; }
+          ''
+            mkdir -p $out
+            ${lib.concatStringsSep "\n" (
+              lib.concatLists (
+                lib.mapAttrsToList (
+                  _repo: debs:
+                  lib.mapAttrsToList (
+                    n: p: "echo Extracting file list from ${n}; dpkg --fsys-tarfile ${p.src} | tar --list > $out/${n}"
+                  ) debs
+                ) finalJetpack.debs
+              )
+            )}
+          '';
       genL4tJson = finalJetpack.callPackage ../pkgs/containers/genL4tJson.nix { };
       containerDeps = finalJetpack.callPackage ../pkgs/containers/deps.nix { };
 
@@ -147,11 +164,9 @@ let
           }
         else
           {
-            nvidia-display-driver =
-              kFinal.callPackage ../pkgs/kernels/r${l4tMajorVersion}/display-driver.nix
-                {
-                  inherit (finalJetpack) gitRepos l4tMajorMinorPatchVersion;
-                };
+            nvidia-display-driver = kFinal.callPackage ../pkgs/kernels/r${l4tMajorVersion}/display-driver.nix {
+              inherit (finalJetpack) gitRepos l4tMajorMinorPatchVersion;
+            };
           };
 
       # Benchmarks

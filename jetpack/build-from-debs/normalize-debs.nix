@@ -4,7 +4,6 @@
   cudaMajorMinorVersion,
   dpkg,
   lib,
-  srcOnly,
   stdenvNoCC,
 }:
 let
@@ -26,13 +25,22 @@ lib.makeOverridable (
     pname,
     version,
   }:
-  srcOnly {
+  # NOTE: corepkgs' srcOnly copies the outputs of an existing derivation rather than
+  # running the unpack/patch phases like nixpkgs' srcOnly, so do the equivalent here.
+  stdenvNoCC.mkDerivation {
     __structuredAttrs = true;
     strictDeps = true;
 
-    stdenv = stdenvNoCC;
-
     inherit srcs pname version;
+
+    phases = [
+      "unpackPhase"
+      "patchPhase"
+      "installPhase"
+    ];
+    installPhase = ''
+      cp -pr --reflink=auto -- . "$out"
+    '';
 
     nativeBuildInputs = [ dpkg ];
 
