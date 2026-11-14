@@ -6,7 +6,6 @@
   cccl,
   cuda_cudart,
   cuda_nvcc,
-  cudaAtLeast,
   cudaNamePrefix,
   fetchFromGitHub,
   flags,
@@ -32,20 +31,15 @@ backendStdenv.mkDerivation (finalAttrs: {
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl";
 
-  version =
-    if cudaAtLeast "12.0" then
-      "2.30.7-1"
-    else
-      "2.25.1-1";
+  # NOTE: Older CUDA releases pin an older NCCL in ../../cuda-packages.nix. Keep this a plain
+  # version/hash pair so ekapkgs-update can bump it.
+  version = "2.30.7-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     tag = "v${finalAttrs.version}";
-    hash = lib.getAttr finalAttrs.version {
-      "2.30.7-1" = "sha256-fdiQZweX0jYfGroP0bL5Sfv3+DkCzVBZZLEbPv8aqq8=";
-      "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
-    };
+    hash = "sha256-fdiQZweX0jYfGroP0bL5Sfv3+DkCzVBZZLEbPv8aqq8=";
   };
 
   outputs = [
@@ -94,7 +88,8 @@ backendStdenv.mkDerivation (finalAttrs: {
   # CCCL headers are under include/cccl/ but consumers expect cuda/atomic etc.
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-unused-function"
-    "-isystem" "${lib.getOutput "include" cccl}/include/cccl"
+    "-isystem"
+    "${lib.getOutput "include" cccl}/include/cccl"
   ];
 
   enableParallelBuilding = true;
@@ -109,6 +104,11 @@ backendStdenv.mkDerivation (finalAttrs: {
   '';
 
   disallowedRequisites = [ (getBin cuda_nvcc) ];
+
+  passthru.ekapkgs-update = {
+    github-repo = "NVIDIA/nccl";
+    version-regex = "^v(.*)$";
+  };
 
   meta = {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
