@@ -82,3 +82,18 @@ higher-level frameworks:
 | ML | `cudnn`, `libcutensor`, `tensorrt`, `nccl` |
 | Tools | `cuda_cupti`, `cuda_gdb`, `cuda_nvdisasm`, `cuda_sanitizer_api` |
 | Misc | `libnpp`, `libnvjpeg`, `libnvjitlink`, `libnvvm`, `cuda_nvml_dev` |
+
+## Jetson / JetPack
+
+JetPack scopes for NVIDIA Jetson devices live under `jetpack/` and are exposed
+as `jetpack.v5`, `jetpack.v6`, and `jetpack.v7` (aliased as `jetpackPackages_5`,
+`jetpackPackages_6`, `jetpackPackages_7`, and `jetpackPackages`). They are
+adapted from [anduril/jetpack-nixos](https://github.com/anduril/jetpack-nixos).
+
+> [!WARNING]
+> Jetson support has only been evaluated, not tested on hardware. It still
+> needs to be built and verified on real Jetson devices before it can be relied
+> on. Several packages also do not evaluate yet because they depend on
+> packages that corepkgs does not provide (e.g. `buildLinux`, `gst_all_1`,
+> `qemu-user`, `tpm2-tools`, and various Python packages), and
+> `cudaPackages_11_4` needs GCC 11 or older.
