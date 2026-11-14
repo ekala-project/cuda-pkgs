@@ -20,6 +20,7 @@ This repository is the CUDA vertical slice for the ekapkgs poly-repo Nixpkgs for
 | [`cuda/backend-stdenv/`](cuda/backend-stdenv/) | CUDA-aware stdenv with compatible GCC version |
 | [`cuda/scope/`](cuda/scope/) | Scope constructor that builds a complete cudaPackages set |
 | [`cuda/pkgs/`](cuda/pkgs/) | Auto-discovered CUDA package expressions |
+| [`maintainers/`](maintainers/) | Update and validation scripts (`update.py`, `eval-sweep.sh`) |
 | [`pkgs-many/cuda-packages/`](pkgs-many/cuda-packages/) | mkManyVariants for versioned cudaPackages (12.8, 13.3) |
 | [`pkgs/`](pkgs/) | Native (non-CUDA) package expressions |
 
@@ -106,6 +107,16 @@ nix-instantiate --arg config '{ allowUnfree = true; }' -A cudaPackages_12_8.<pna
 # Format
 nix fmt <path-to-file>
 ```
+
+## Updating
+
+Use the `update-cuda-pkgs` skill ([`.claude/skills/update-cuda-pkgs/SKILL.md`](.claude/skills/update-cuda-pkgs/SKILL.md)).
+In short:
+
+- `maintainers/update.py check` reports newer NVIDIA manifests, TensorRT releases, and pin revisions.
+- `maintainers/update.py bump-patch` and `maintainers/update.py pins` handle the mechanical updates.
+- `ekapkgs-update update cudaPackages.nccl` updates nccl; no other package has a `version`/`hash` it can bump.
+- `maintainers/eval-sweep.sh` evaluates every `cudaPackages_*` derivation on x86_64-linux and aarch64-linux.
 
 ## External Dependencies
 

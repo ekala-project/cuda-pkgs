@@ -70,6 +70,20 @@ import ./. {
 A single scope can still be adjusted with
 `cudaPackages_12_8.overrideScope (final: prev: { ... })`.
 
+## Updating
+
+```bash
+maintainers/update.py check        # newer manifests, TensorRT releases, pins
+maintainers/update.py bump-patch   # newest patch release of every selected manifest
+maintainers/update.py pins         # latest corepkgs / nix-lib
+maintainers/eval-sweep.sh          # evaluate every cudaPackages_* derivation
+```
+
+`nccl` is updated with [ekapkgs-update](https://github.com/ekala-project/ekapkgs-update)
+(`ekapkgs-update update cudaPackages.nccl`). New CUDA series, new packages, TensorRT,
+and compatibility data need judgement; see
+[`.claude/skills/update-cuda-pkgs/SKILL.md`](.claude/skills/update-cuda-pkgs/SKILL.md).
+
 ## Packages
 
 32 packages across core runtime, math libraries, profiling tools, and
